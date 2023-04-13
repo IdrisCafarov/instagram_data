@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                    <div class="card-body">
+                        <div class="alert alert-primary alert-dismissible fade show">
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="me-2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                            <strong>Welcome!</strong> {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                {% endif %}
+            <div class="container-fluid">
+                {% comment %} <div class="page-titles">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="javascript:void(0)">Shop </a></li>
+						<li class="breadcrumb-item active"><a href="javascript:void(0)">Checkout</a></li>
+					</ol>
+                </div> {% endcomment %}
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4 order-lg-2 mb-4">
+                                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="text-muted">Instagram Accounts</span>
+                                            <button type="button" class="btn btn-rounded btn-info" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg"><span
+												class="btn-icon-start text-info" ><i class="fa fa-plus color-info"></i>
+											</span>Add</button>
+
+                                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <form method="POST">
+                                                            {% csrf_token %}
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Add Instagram</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                            </button>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="basic-form">
+                                                                    <div class="mb-3 row">
+                                                                        <label class="col-sm-3 col-form-label">Login</label>
+                                                                        <div class="col-sm-9">
+                                                                            {{form_modal.login|as_crispy_field}}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3 row">
+                                                                        <label class="col-sm-3 col-form-label">Password</label>
+                                                                        <div class="col-sm-9">
+                                                                            {{form_modal.password|as_crispy_field}}
+                                                                        </div>
+                                                                    </div>
+
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" name="modal_sub" class="btn btn-primary">Add</button>
+                                                        </div>
+                                                    </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </h4>
+                                        <ul class="list-group mb-3">
+
+											{% for instagram in user.instagram.all %}
+                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                <div>
+                                                    <h6 class="my-0">{{instagram.login}}</h6>
+                                                </div>
+                                                <a href="/delete_instagram/{{instagram.id}}">
+                                                <button type="button" class="btn btn-danger">Sil <span class="btn-icon-end"><i class="fas fa-times"></i></i></span>
+												</button>
+                                            </a>
+                                            </li>
+											{% endfor %}
+
+                                        </ul>
+
+
+                                    </div>
+                                    <div class="col-lg-8 order-lg-1">
+                                        <h4 class="mb-3">Personal Informations</h4>
+                                        <form class="needs-validation" novalidate="" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="firstName" class="form-label">First name</label>
+                                                    {{form.name|as_crispy_field}}
+                                                    <div class="invalid-feedback">
+                                                        Valid first name is required.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="lastName"  class="form-label">Last name</label>
+                                                    {{form.surname|as_crispy_field}}
+                                                    <div class="invalid-feedback">
+                                                        Valid last name is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                            <div class="mb-3">
+                                                <label for="email"  class="form-label">Email <span
+                                                        class="text-muted"></span></label>
+                                                {{form.email|as_crispy_field}}
+                                                <div class="invalid-feedback">
+                                                    Please enter a valid email address for shipping updates.
+                                                </div>
+                                            </div>
+
+
+
+
+                                                <div class="basic-form custom_file_input">
+
+                                                        <div class="input-group">
+
+                                                                {{form.profil_image|as_crispy_field}}
+
+                                                        </div>
+
+                                                </div>
+
+
+                                            <hr class="mb-4">
+
+                                            <button type="submit" name="sub_main" class="btn btn-primary btn-lg btn-block">Submit Data </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+		{% endblock body %}
