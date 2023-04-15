@@ -160,7 +160,7 @@ class UpdateForm(forms.ModelForm):
 
 
 
-class InstagramForm(forms.ModelForm):
+class InstagramForm(forms.Form):
 
     login= forms.CharField(widget=forms.TextInput(attrs={
         'class':'form-control',
@@ -179,9 +179,3 @@ class InstagramForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for key, field in self.fields.items():
             field.label = ""
-
-
-
-    class Meta:
-        model = Instagram
-        fields = ['login', 'password']

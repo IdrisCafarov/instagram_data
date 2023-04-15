@@ -21,10 +21,10 @@ User = get_user_model()
 
 class UserAdmin(BaseUserAdmin):
 
-    list_display = ('email', 'name', 'surname', 'is_active', 'is_superuser')
+    list_display = ('email', 'name', 'surname','is_active', 'is_superuser')
     list_filter = ('is_active', 'is_superuser')
     fieldsets = (
-        (None, {'fields': ('email', 'name', 'surname')}),
+        (None, {'fields': ('email', 'name', 'surname','profil_image')}),
 
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )

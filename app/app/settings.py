@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!)x$4r1co(_upyqog3tr&fjm7o$cl2j7px$6khj@i!3xl(%cv@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = True
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
@@ -159,12 +159,12 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DEFAULT_FROM_EMAIL = 'support@getguide.az'
 SERVER_EMAIL = 'support@getguide.az'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'support@getguide.az'
 EMAIL_HOST_PASSWORD = 'valncumomeqpbufv'
-EMAIL_PORT = 465
+EMAIL_PORT = 587
 
 #celery
 CELERY_RESULT_BACKEND = "redis://redis:6379"

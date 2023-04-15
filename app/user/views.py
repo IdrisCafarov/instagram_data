@@ -11,6 +11,7 @@ from django.utils.encoding import force_bytes, force_str
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.conf import settings
+from app.tasks import *
 # from account
 #Selenium
 from core.selenium_utils import *
@@ -20,6 +21,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.common.action_chains import ActionChains
+from celery import shared_task
 
 
 
@@ -157,78 +159,7 @@ def update_view(request):
             login = request.POST['login']
             password = request.POST['password']
 
-            instagram = form_modal.save(commit=False)
-            instagram.user = usr
-
-
-            driver = get_driver()
-
-
-            driver.get("https://www.instagram.com/")
-
-            if is_logged_in(driver):
-                print("qaqa men girmisem e -1")
-                # Click the profile icon to navigate to the profile page
-                logout_url = "https://www.instagram.com/accounts/logout/"
-                driver.get(logout_url)
-
-
-            driver.get("https://www.instagram.com/accounts/login/")
-
-            # Wait for the username input element to be present on the page
-
-            try:
-                WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.NAME, "username")))
-            except TimeoutException:
-
-                messages.error(request, "Login səhifəsinin yükləmməsi uzun çəkdi. Zəhmət olmasa sonra yenidən cəhd edin.")
-                print("Login page timeout.")
-                driver.quit()
-                return redirect('edit')
-
-            username_input = driver.find_element(By.NAME, "username")
-            password_input = driver.find_element(By.NAME, "password")
-            username_input.send_keys(login)
-            password_input.send_keys(password)
-
-            time.sleep(2)
-            login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
-
-            login_button.click()
-
-            try:
-                WebDriverWait(driver, 60).until(lambda d: d.execute_script("return /instagram.com\/accounts\/login/.test(window.location.href) == false"))
-
-                if is_logged_in(driver):
-                    follower_count, following_count, profile_picture_url = get_instagram_data(driver, login)
-                    if follower_count is None or following_count is None or profile_picture_url is None:
-                        messages.error(request, "İntagram dataları alına bilmədi")
-                    else:
-                        instagram.follower = follower_count
-                        instagram.follow = following_count
-                        image_content = download_image(profile_picture_url)
-                        if image_content:
-                            # Save the image to the ImageField of the instance
-                            file_name = f"{login}_profile_picture.jpg"
-                            instagram.image.save(file_name, image_content, save=True)
-                        instagram.save()
-                    messages.success(request, "Uğurla instagram hesabını əlavə etdiz")
-
-
-
-
-
-                else:
-                    messages.error(request, "İntagram dataları alına bilmədi")
-                    print("Login failed.")
-            except TimeoutException:
-                messages.error(request, "Login səhifəsinin yükləmməsi uzun çəkdi. Zəhmət olmasa sonra yenidən cəhd edin.")
-                print("Login timeout.")
-            except:
-                messages.error(request, "Hesabınıza daxil olunmadı.")
-                print("Login failed.")
-
-            driver.quit()
+            update_instagram_data_task.delay(login,password,usr.id)
     else:
         form_modal = InstagramForm()
 
