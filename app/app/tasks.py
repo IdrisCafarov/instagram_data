@@ -1,6 +1,8 @@
 from celery import shared_task
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from django.shortcuts import get_object_or_404
+
 
 from core.selenium_utils import *
 from selenium.webdriver.support.ui import WebDriverWait
@@ -95,7 +97,7 @@ def every_10():
 @shared_task
 def update_instagram_data_task(login,password,id):
 
-
+        user = get_object_or_404(MyUser, id=id)
         driver = get_driver()
 
 
@@ -141,6 +143,13 @@ def update_instagram_data_task(login,password,id):
             if is_logged_in(driver):
                 follower_count, following_count, profile_picture_url = get_instagram_data(driver, login)
                 if follower_count is None or following_count is None or profile_picture_url is None:
+                    send_mail(
+                        'Notification',
+                        'Failed to get Instagram data',
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=True,
+                        )
                     print("Failed to get Instagram data")
                 else:
                     instagram=Instagram.objects.create(user_id=id,login=login,password=password)
@@ -152,6 +161,14 @@ def update_instagram_data_task(login,password,id):
                         file_name = f"{login}_profile_picture.jpg"
                         instagram.image.save(file_name, image_content, save=True)
                     instagram.save()
+                    send_mail(
+                        'Notification',
+                        'Successfully get data from instagram',
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=True,
+                        )
+                    print("Failed to get Instagram data")
 
 
 
@@ -160,12 +177,33 @@ def update_instagram_data_task(login,password,id):
 
             else:
                 data = False
+                send_mail(
+                        'Notification',
+                        'Login failed.',
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=True,
+                        )
                 print("Login failed.")
         except TimeoutException:
             data = False
+            send_mail(
+                        'Notification',
+                        'Login timeout.',
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=True,
+                        )
             print("Login timeout.")
         except:
             data = False
+            send_mail(
+                        'Notification',
+                        'Login failed.',
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=True,
+                        )
             print("Login failed.")
 
         driver.quit()
