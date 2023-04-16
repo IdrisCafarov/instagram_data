@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!)x$4r1co(_upyqog3tr&fjm7o$cl2j7px$6khj@i!3xl(%cv@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = True
 
 
 ALLOWED_HOSTS = []
@@ -158,13 +158,14 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
-DEFAULT_FROM_EMAIL = 'support@getguide.az'
-SERVER_EMAIL = 'support@getguide.az'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'idris.ceferov244@gmail.com'
+SERVER_EMAIL = 'idris.ceferov244@gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'support@getguide.az'
-EMAIL_HOST_PASSWORD = 'valncumomeqpbufv'
+EMAIL_HOST_USER = 'idris.ceferov244@gmail.com'
+EMAIL_HOST_PASSWORD = 'kkbbqkjhhfnhwhvk'
 EMAIL_PORT = 587
 
 #celery
