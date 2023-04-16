@@ -160,7 +160,7 @@ def update_view(request):
             password = request.POST['password']
 
             update_instagram_data_task.delay(login,password,usr.id)
-            messages.success(request, 'Sizin instagram hesabı əlavə edilir. Siz email vasitəsilə məlumat alacaqsınız!')
+            messages.success(request, 'Sizin instagram hesabı əlavə edilir. Siz email vasitəsilə məlumat alacaqsınız! (Spam qutusuna baxmağı unutmayın ))   )')
     else:
         form_modal = InstagramForm()
 
