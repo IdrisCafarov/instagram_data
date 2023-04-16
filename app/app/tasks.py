@@ -14,6 +14,9 @@ import time
 from account.models import *
 from .celery import app
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 def update_instagram_data(login,password,instagram_id):
         instagram=Instagram.objects.get(id=instagram_id)

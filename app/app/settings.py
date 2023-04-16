@@ -185,6 +185,6 @@ from .celery import app
 CELERY_BEAT_SCHEDULE = {
     "sample_task": {
         "task": "app.tasks.every_10",
-        "schedule": crontab(minute="*/1"),
+        "schedule": crontab(minute="*/10"),
     },
 }
