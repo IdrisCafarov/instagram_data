@@ -89,7 +89,7 @@ class Instagram(models.Model):
     user = models.ForeignKey(MyUser,on_delete=models.CASCADE, related_name="instagram")
     follower = models.IntegerField(null=True,blank=True)
     follow = models.IntegerField(null=True,blank=True)
-    image = models.ImageField(upload_to="instagram_pp",null=True)
+    image = models.ImageField(upload_to="Instagram Profile",null=True,blank=True)
 
     def __str__(self):
         return self.login
