@@ -80,7 +80,7 @@ class MyUser(AbstractBaseUser):
         if self.profil_image:
             return self.profil_image.url
         else:
-            return "/static/user_pp.png"
+            return "/static/static/user_pp.png"
 
 
 class Instagram(models.Model):
