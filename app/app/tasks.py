@@ -39,7 +39,7 @@ def update_instagram_data(login,password,instagram_id):
         # Wait for the username input element to be present on the page
 
         try:
-            WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.NAME, "username")))
+            WebDriverWait(driver, 160).until(EC.presence_of_element_located((By.NAME, "username")))
         except TimeoutException:
 
             driver.quit()
