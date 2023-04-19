@@ -55,7 +55,7 @@ def update_instagram_data(login,password,instagram_id):
         login_button.click()
 
         try:
-            WebDriverWait(driver, 60).until(lambda d: d.execute_script("return /instagram.com\/accounts\/login/.test(window.location.href) == false"))
+            WebDriverWait(driver, 160).until(lambda d: d.execute_script("return /instagram.com\/accounts\/login/.test(window.location.href) == false"))
 
             if is_logged_in(driver):
                 follower_count, following_count, profile_picture_url = get_instagram_data(driver, login)
